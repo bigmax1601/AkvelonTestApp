@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkvelonTestApp.Web", "Akvel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkvelonTestApp.Web.Tests", "AkvelonTestApp.Web.Tests\AkvelonTestApp.Web.Tests.csproj", "{EA8C84D3-357F-48E5-957F-C6862A69ADD3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkvelonTestApp.Data", "AkvelonTestApp.Data\AkvelonTestApp.Data.csproj", "{655F5F83-BE81-4B06-B42C-06BC4F399A41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{EA8C84D3-357F-48E5-957F-C6862A69ADD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA8C84D3-357F-48E5-957F-C6862A69ADD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA8C84D3-357F-48E5-957F-C6862A69ADD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{655F5F83-BE81-4B06-B42C-06BC4F399A41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{655F5F83-BE81-4B06-B42C-06BC4F399A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{655F5F83-BE81-4B06-B42C-06BC4F399A41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{655F5F83-BE81-4B06-B42C-06BC4F399A41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
