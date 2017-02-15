@@ -11,13 +11,13 @@ using AkvelonTestApp.Web.Controllers;
 namespace AkvelonTestApp.Web.Tests.Controllers
 {
 	[TestClass]
-	public class ValuesControllerTest
+	public class TestServiceControllerTest
 	{
 		[TestMethod]
 		public void Get()
 		{
 			// Arrange
-			ValuesController controller = new ValuesController();
+			TestServiceController controller = new TestServiceController();
 
 			// Act
 			IEnumerable<string> result = controller.Get();
@@ -33,7 +33,7 @@ namespace AkvelonTestApp.Web.Tests.Controllers
 		public void GetById()
 		{
 			// Arrange
-			ValuesController controller = new ValuesController();
+			TestServiceController controller = new TestServiceController();
 
 			// Act
 			string result = controller.Get(5);
@@ -46,7 +46,7 @@ namespace AkvelonTestApp.Web.Tests.Controllers
 		public void Post()
 		{
 			// Arrange
-			ValuesController controller = new ValuesController();
+			TestServiceController controller = new TestServiceController();
 
 			// Act
 			controller.Post("value");
@@ -58,7 +58,7 @@ namespace AkvelonTestApp.Web.Tests.Controllers
 		public void Put()
 		{
 			// Arrange
-			ValuesController controller = new ValuesController();
+			TestServiceController controller = new TestServiceController();
 
 			// Act
 			controller.Put(5, "value");
@@ -70,7 +70,7 @@ namespace AkvelonTestApp.Web.Tests.Controllers
 		public void Delete()
 		{
 			// Arrange
-			ValuesController controller = new ValuesController();
+			TestServiceController controller = new TestServiceController();
 
 			// Act
 			controller.Delete(5);

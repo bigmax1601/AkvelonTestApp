@@ -5,10 +5,25 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
+using AkvelonTestApp.Data;
+using AkvelonTestApp.Data.Interfaces;
+
 namespace AkvelonTestApp.Web.Controllers
 {
-	public class ValuesController : ApiController
+	public class TestServiceController : ApiController
 	{
+		private readonly IAppDbContext _db;
+
+		public TestServiceController() : this(new AppDbContext())
+		{
+			//TODO remove this constructor after mocking db in tests
+		}
+
+		public TestServiceController(IAppDbContext db)
+		{
+			_db = db;
+		}
+
 		// GET api/values
 		public IEnumerable<string> Get()
 		{
