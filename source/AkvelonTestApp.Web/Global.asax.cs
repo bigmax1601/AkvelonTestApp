@@ -18,6 +18,12 @@ namespace AkvelonTestApp.Web
 			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 			RouteConfig.RegisterRoutes(RouteTable.Routes);
 			BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+			// http://stackoverflow.com/questions/23098191/failed-to-serialize-the-response-in-web-api-with-json
+			//GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings
+			//	.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize;
+			//GlobalConfiguration.Configuration.Formatters
+			//	.Remove(GlobalConfiguration.Configuration.Formatters.XmlFormatter);
 		}
 	}
 }

@@ -17,6 +17,8 @@
 
 using AkvelonTestApp.Data;
 using AkvelonTestApp.Data.Interfaces;
+using AkvelonTestApp.Web.Areas.HelpPage.Controllers;
+
 using StructureMap;
 using StructureMap.Web.Pipeline;
 
@@ -39,6 +41,11 @@ namespace AkvelonTestApp.Web.DependencyResolution
 			For<IAppDbContext>()
 				.LifecycleIs(new HttpContextLifecycle())
 				.Use(i => new AppDbContext());
+
+			// http://stackoverflow.com/questions/19687841/structuremap-exception-after-adding-the-webapi-helppage-to-a-webapi-project
+			For<HelpController>()
+				.LifecycleIs(new HttpContextLifecycle()) // http context
+				.Use(ctx => new HelpController());
 
 			//For<IExample>().Use<Example>();
 		}
