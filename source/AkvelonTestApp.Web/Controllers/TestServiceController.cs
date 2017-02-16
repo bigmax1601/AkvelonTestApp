@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-
-using AkvelonTestApp.Data;
 using AkvelonTestApp.Data.Interfaces;
+using AkvelonTestApp.Data.Models;
 
 namespace AkvelonTestApp.Web.Controllers
 {
@@ -14,41 +10,76 @@ namespace AkvelonTestApp.Web.Controllers
 	{
 		private readonly IAppDbContext _db;
 
-		public TestServiceController() : this(new AppDbContext())
-		{
-			//TODO remove this constructor after mocking db in tests
-		}
-
 		public TestServiceController(IAppDbContext db)
 		{
 			_db = db;
 		}
 
-		// GET api/values
-		public IEnumerable<string> Get()
+		/// <summary>
+		/// Get all user nicknames
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet]
+		public IEnumerable<string> Users()
 		{
-			return new string[] { "value1", "value2" };
+			return _db.Users.Select(i => i.NickName).ToList();
 		}
 
-		// GET api/values/5
-		public string Get(int id)
+		/// <summary>
+		/// Get User info by NickName
+		/// </summary>
+		/// <param name="nickName"></param>
+		/// <returns></returns>
+		[HttpGet]
+		public UserModel GetUser(string nickName)
 		{
-			return "value";
+			return _db.Users.First(i => i.NickName == nickName);
 		}
 
-		// POST api/values
-		public void Post([FromBody]string value)
+		/// <summary>
+		/// Create user
+		/// </summary>
+		/// <param name="nickName"></param>
+		/// <param name="value"></param>
+		[HttpPost]
+		public void CreateUser(string nickName, [FromBody]string value)
 		{
+			_db.Users.Add(new UserModel { NickName = nickName, FullName = value });
+			_db.SaveChanges();
 		}
 
-		// PUT api/values/5
-		public void Put(int id, [FromBody]string value)
+		/// <summary>
+		/// Update user
+		/// </summary>
+		/// <param name="nickName"></param>
+		/// <param name="value"></param>
+		[HttpPut]
+		public void UpdateUser(string nickName, [FromBody]string value)
 		{
+			var user = _db.Users.FirstOrDefault(i => i.NickName == nickName);
+
+			if (user == null)
+			{
+				user = new UserModel { NickName = nickName };
+				_db.Users.Add(user);
+			}
+
+			user.FullName = value;
+
+			_db.SaveChanges();
 		}
 
-		// DELETE api/values/5
-		public void Delete(int id)
+		/// <summary>
+		/// Delete user
+		/// </summary>
+		/// <param name="nickName"></param>
+		[HttpDelete]
+		public void DeleteUser(string nickName)
 		{
+			var user = _db.Users.First(i => i.NickName == nickName);
+			_db.Users.Remove(user);
+
+			_db.SaveChanges();
 		}
 	}
 }

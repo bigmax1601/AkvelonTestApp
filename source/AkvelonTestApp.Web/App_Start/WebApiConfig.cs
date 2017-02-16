@@ -16,8 +16,8 @@ namespace AkvelonTestApp.Web
 
 			config.Routes.MapHttpRoute(
 				name: "DefaultApi",
-				routeTemplate: "api/{controller}/{id}",
-				defaults: new { id = RouteParameter.Optional }
+				routeTemplate: "Services/{controller}/{action}/{nickName}",
+				defaults: new { nickName = RouteParameter.Optional }
 			);
 		}
 	}

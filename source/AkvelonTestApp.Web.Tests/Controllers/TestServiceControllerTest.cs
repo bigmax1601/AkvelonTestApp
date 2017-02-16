@@ -1,87 +1,140 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using AkvelonTestApp.Data.Interfaces;
+using AkvelonTestApp.Data.Models;
 using AkvelonTestApp.Web.Controllers;
 using NUnit.Framework;
+using Moq;
 
 namespace AkvelonTestApp.Web.Tests.Controllers
 {
 	[TestFixture]
 	public class TestServiceControllerTest
 	{
-		private TestServiceController controller;
+		private TestServiceController _controller;
+		private IAppDbContext _dbMock;
 
-		[OneTimeSetUp]
+		[SetUp]
 		public void SetUp()
 		{
-			controller = new TestServiceController();
+			var mock = new Mock<IAppDbContext>();
+			mock.Setup(x => x.Users)
+				.Returns(new FakeDbSet<UserModel>
+				{
+					new UserModel {NickName = "nickName1", FullName = "fullName1"},
+					new UserModel {NickName = "nickName2", FullName = "fullName2"},
+				});
+			_dbMock = mock.Object;
+
+			_controller = new TestServiceController(_dbMock);
 		}
 
 		[Test]
-		public void Get()
+		public void GetUsers()
 		{
 			// Arrange
 
 			// Act
-			IEnumerable<string> result = controller.Get();
+			IEnumerable<string> result = _controller.Users();
 
 			// Assert
 			Assert.IsNotNull(result);
 			Assert.AreEqual(2, result.Count());
-			Assert.AreEqual("value1", result.ElementAt(0));
-			Assert.AreEqual("value2", result.ElementAt(1));
+			Assert.AreEqual("nickName1", result.ElementAt(0));
+			Assert.AreEqual("nickName2", result.ElementAt(1));
 		}
 
-		[Test]
-		public void GetById()
+		[Test, TestCase("nickName1", "fullName1"), TestCase("nickName2", "fullName2")]
+		public void GetUserByNickName(string nickName, string fullName)
 		{
 			// Arrange
 
+
 			// Act
-			string result = controller.Get(5);
+			UserModel result = _controller.GetUser(nickName);
 
 			// Assert
-			Assert.AreEqual("value", result);
+			Assert.AreEqual(nickName, result.NickName);
+			Assert.AreEqual(fullName, result.FullName);
 		}
 
 		[Test]
-		public void Post()
+		public void CreateUser()
 		{
 			// Arrange
+			string nickName = "nickName3";
+			string fullName = "fullName3";
 
 			// Act
-			controller.Post("value");
+			int userCount = _dbMock.Users.Count();
+			_controller.CreateUser(nickName, fullName);
+			var user = _dbMock.Users.FirstOrDefault(i => i.NickName == nickName);
 
 			// Assert
+			Assert.IsNotNull(user);
+			Assert.AreEqual(fullName, user.FullName);
+			Assert.AreEqual(userCount + 1, _dbMock.Users.Count());
 		}
 
 		[Test]
-		public void Put()
+		public void DeleteUser()
 		{
 			// Arrange
+			string nickName = "nickName1";
 
 			// Act
-			controller.Put(5, "value");
+			int userCount = _dbMock.Users.Count();
+			_controller.DeleteUser(nickName);
+			var user = _dbMock.Users.FirstOrDefault(i => i.NickName == nickName);
 
 			// Assert
+			Assert.IsNull(user);
+			Assert.AreEqual(userCount - 1, _dbMock.Users.Count());
 		}
 
 		[Test]
-		public void Delete()
+		public void UpdateExistingUser()
 		{
 			// Arrange
+			string nickName = "nickName1";
+			string fullName = "fullName3";
 
 			// Act
-			controller.Delete(5);
+			int userCount = _dbMock.Users.Count();
+			_controller.UpdateUser(nickName, fullName);
+			var user = _dbMock.Users.FirstOrDefault(i => i.NickName == nickName);
 
 			// Assert
+			Assert.IsNotNull(user);
+			Assert.AreEqual(fullName, user.FullName);
+			Assert.AreEqual(userCount, _dbMock.Users.Count());
 		}
 
-		[OneTimeTearDown]
+		[Test]
+		public void UpdateNotExistingUser()
+		{
+			// Arrange
+			string nickName = "nickName4";
+			string fullName = "fullName4";
+
+			// Act
+			int userCount = _dbMock.Users.Count();
+			_controller.UpdateUser(nickName, fullName);
+			var user = _dbMock.Users.FirstOrDefault(i => i.NickName == nickName);
+
+			// Assert
+			Assert.IsNotNull(user);
+			Assert.AreEqual(fullName, user.FullName);
+			Assert.AreEqual(userCount + 1, _dbMock.Users.Count());
+		}
+
+
+		[TearDown]
 		public void TearDown()
 		{
-			controller.Dispose();
-			controller = null;
+			_controller.Dispose();
+			_controller = null;
 		}
 	}
 }
