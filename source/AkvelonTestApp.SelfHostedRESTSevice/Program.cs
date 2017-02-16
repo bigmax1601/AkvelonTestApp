@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ServiceModel.Web;
 
 using AkvelonTestApp.Data;
+using AkvelonTestApp.SelfHostedRESTSevice.Core;
 
 namespace AkvelonTestApp.SelfHostedRESTSevice
 {
@@ -20,11 +17,30 @@ namespace AkvelonTestApp.SelfHostedRESTSevice
 		static void Main(string[] args)
 		{
 			var db = new AppDbContext();
-			var users = string.Join(", ", db.Users.Select(i => i.NickName).AsEnumerable());
 
-			Console.WriteLine(users);
+			var restService = new RESTService(db);
 
-			Console.Write("PressEnter to exit...");
+
+			Console.WriteLine("Starting RESTService...\n\n");
+
+			using (var serviceHost = new WebServiceHost(restService, new Uri("http://localhost:7777")))
+			{
+				serviceHost.Open();
+
+				Console.WriteLine("RESTService is running now.\n\n");
+
+				string serviceRoot = Confguration.Routing.RootServiceRoute;
+				Console.WriteLine($"Use http://localhost:7777/{serviceRoot} + service_name in your browser.\n");
+
+				Console.Write("Press Enter to stop RESTService...");
+				Console.ReadLine();
+
+				serviceHost.Close();
+			}
+
+			Console.WriteLine("RESTService is stopped.\n\n");
+
+			Console.WriteLine("Press Enter to exit...");
 			Console.ReadLine();
 		}
 	}

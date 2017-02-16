@@ -11,6 +11,17 @@ namespace AkvelonTestApp.SelfHostedRESTSevice
 			public const string DataDirectoryRelative = "App_Data";
 		}
 
+		public static class Routing
+		{
+			public const string RootServiceRoute = "/Services/TestService/";
+
+			public const string GetUsersRoute = RootServiceRoute + "Users";
+			public const string GetUserRoute = RootServiceRoute + "GetUser/{nickName}";
+			public const string CreateUserRoute = RootServiceRoute + "CreateUser";
+			public const string UpdateUserRoute = RootServiceRoute + "UpdateUser/{nickName}";
+			public const string DeleteUserRoute = RootServiceRoute + "DeleteUser/{nickName}";
+		}
+
 		public static void Initialize()
 		{
 			SetDataDirectory();
@@ -26,7 +37,7 @@ namespace AkvelonTestApp.SelfHostedRESTSevice
 			{
 				Directory.CreateDirectory(dataPath);
 			}
-			
+
 			AppDomain.CurrentDomain.SetData("DataDirectory", dataPath);
 		}
 	}
