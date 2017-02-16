@@ -1,14 +1,14 @@
 ﻿using System.Web.Mvc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AkvelonTestApp.Web;
 using AkvelonTestApp.Web.Controllers;
+
+using NUnit.Framework;
 
 namespace AkvelonTestApp.Web.Tests.Controllers
 {
-	[TestClass]
+	[TestFixture]
 	public class HomeControllerTest
 	{
-		[TestMethod]
+		[Test]
 		public void Index()
 		{
 			// Arrange
