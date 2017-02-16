@@ -9,11 +9,18 @@ namespace AkvelonTestApp.Web.Tests.Controllers
 	[TestFixture]
 	public class TestServiceControllerTest
 	{
+		private TestServiceController controller;
+
+		[OneTimeSetUp]
+		public void SetUp()
+		{
+			controller = new TestServiceController();
+		}
+
 		[Test]
 		public void Get()
 		{
 			// Arrange
-			TestServiceController controller = new TestServiceController();
 
 			// Act
 			IEnumerable<string> result = controller.Get();
@@ -29,7 +36,6 @@ namespace AkvelonTestApp.Web.Tests.Controllers
 		public void GetById()
 		{
 			// Arrange
-			TestServiceController controller = new TestServiceController();
 
 			// Act
 			string result = controller.Get(5);
@@ -42,7 +48,6 @@ namespace AkvelonTestApp.Web.Tests.Controllers
 		public void Post()
 		{
 			// Arrange
-			TestServiceController controller = new TestServiceController();
 
 			// Act
 			controller.Post("value");
@@ -54,7 +59,6 @@ namespace AkvelonTestApp.Web.Tests.Controllers
 		public void Put()
 		{
 			// Arrange
-			TestServiceController controller = new TestServiceController();
 
 			// Act
 			controller.Put(5, "value");
@@ -66,12 +70,18 @@ namespace AkvelonTestApp.Web.Tests.Controllers
 		public void Delete()
 		{
 			// Arrange
-			TestServiceController controller = new TestServiceController();
 
 			// Act
 			controller.Delete(5);
 
 			// Assert
+		}
+
+		[OneTimeTearDown]
+		public void TearDown()
+		{
+			controller.Dispose();
+			controller = null;
 		}
 	}
 }
