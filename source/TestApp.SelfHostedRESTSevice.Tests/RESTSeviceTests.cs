@@ -1,21 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using TestApp.Data.Interfaces;
-using TestApp.Data.Models;
-using TestApp.Web.Controllers;
-using NUnit.Framework;
 using Moq;
 
+using NUnit.Framework;
+
+using TestApp.Data.Interfaces;
+using TestApp.Data.Models;
+using TestApp.SelfHostedRESTSevice.Core;
+using TestApp.SelfHostedRESTSevice.Interfaces;
 using TestApp.TestsLib;
 
-namespace TestApp.Web.Tests.Controllers
+namespace TestApp.SelfHostedRESTSevice.Tests
 {
 	[TestFixture]
-	public class TestServiceControllerTest
-	{
-		private TestServiceController _controller;
+    public class RESTSeviceTests
+    {
 		private IAppDbContext _dbMock;
+		private IRESTService _RESTService;
 
 		[SetUp]
 		public void SetUp()
@@ -29,7 +31,7 @@ namespace TestApp.Web.Tests.Controllers
 				});
 			_dbMock = mock.Object;
 
-			_controller = new TestServiceController(_dbMock);
+			_RESTService = new RESTService(_dbMock);
 		}
 
 		[Test]
@@ -38,7 +40,7 @@ namespace TestApp.Web.Tests.Controllers
 			// Arrange
 
 			// Act
-			IEnumerable<string> result = _controller.Users();
+			IEnumerable<string> result = _RESTService.GetAllUsers();
 
 			// Assert
 			Assert.IsNotNull(result);
@@ -54,7 +56,7 @@ namespace TestApp.Web.Tests.Controllers
 
 
 			// Act
-			UserModel result = _controller.GetUser(nickName);
+			UserModel result = _RESTService.GetUser(nickName);
 
 			// Assert
 			Assert.AreEqual(nickName, result.NickName);
@@ -65,17 +67,20 @@ namespace TestApp.Web.Tests.Controllers
 		public void CreateUser()
 		{
 			// Arrange
-			string nickName = "nickName3";
-			string fullName = "fullName3";
+			int userCount = _dbMock.Users.Count();
+			var user = new UserModel
+			{
+				NickName = "nickName3",
+				FullName = "fullName3"
+			};
 
 			// Act
-			int userCount = _dbMock.Users.Count();
-			_controller.CreateUser(nickName, fullName);
-			var user = _dbMock.Users.FirstOrDefault(i => i.NickName == nickName);
+			_RESTService.CreateUser(user);
+			var dbUser = _dbMock.Users.FirstOrDefault(i => i.NickName == user.NickName);
 
 			// Assert
-			Assert.IsNotNull(user);
-			Assert.AreEqual(fullName, user.FullName);
+			Assert.IsNotNull(dbUser);
+			Assert.AreEqual(user.FullName, dbUser.FullName);
 			Assert.AreEqual(userCount + 1, _dbMock.Users.Count());
 		}
 
@@ -83,11 +88,11 @@ namespace TestApp.Web.Tests.Controllers
 		public void DeleteUser()
 		{
 			// Arrange
+			int userCount = _dbMock.Users.Count();
 			string nickName = "nickName1";
 
 			// Act
-			int userCount = _dbMock.Users.Count();
-			_controller.DeleteUser(nickName);
+			_RESTService.DeleteUser(nickName);
 			var user = _dbMock.Users.FirstOrDefault(i => i.NickName == nickName);
 
 			// Assert
@@ -99,17 +104,20 @@ namespace TestApp.Web.Tests.Controllers
 		public void UpdateExistingUser()
 		{
 			// Arrange
-			string nickName = "nickName1";
-			string fullName = "fullName3";
+			int userCount = _dbMock.Users.Count();
+			var user = new UserModel
+			{
+				NickName = "nickName2",
+				FullName = "fullName222"
+			};
 
 			// Act
-			int userCount = _dbMock.Users.Count();
-			_controller.UpdateUser(nickName, fullName);
-			var user = _dbMock.Users.FirstOrDefault(i => i.NickName == nickName);
+			_RESTService.UpdateUser(user.NickName, user);
+			var dbUser = _dbMock.Users.FirstOrDefault(i => i.NickName == user.NickName);
 
 			// Assert
-			Assert.IsNotNull(user);
-			Assert.AreEqual(fullName, user.FullName);
+			Assert.IsNotNull(dbUser);
+			Assert.AreEqual(user.FullName, dbUser.FullName);
 			Assert.AreEqual(userCount, _dbMock.Users.Count());
 		}
 
@@ -117,17 +125,20 @@ namespace TestApp.Web.Tests.Controllers
 		public void UpdateNotExistingUser()
 		{
 			// Arrange
-			string nickName = "nickName4";
-			string fullName = "fullName4";
+			int userCount = _dbMock.Users.Count();
+			var user = new UserModel
+			{
+				NickName = "nickName3",
+				FullName = "fullName3"
+			};
 
 			// Act
-			int userCount = _dbMock.Users.Count();
-			_controller.UpdateUser(nickName, fullName);
-			var user = _dbMock.Users.FirstOrDefault(i => i.NickName == nickName);
+			_RESTService.UpdateUser(user.NickName, user);
+			var dbUser = _dbMock.Users.FirstOrDefault(i => i.NickName == user.NickName);
 
 			// Assert
-			Assert.IsNotNull(user);
-			Assert.AreEqual(fullName, user.FullName);
+			Assert.IsNotNull(dbUser);
+			Assert.AreEqual(user.FullName, dbUser.FullName);
 			Assert.AreEqual(userCount + 1, _dbMock.Users.Count());
 		}
 
@@ -135,8 +146,7 @@ namespace TestApp.Web.Tests.Controllers
 		[TearDown]
 		public void TearDown()
 		{
-			_controller.Dispose();
-			_controller = null;
+			_RESTService = null;
 		}
 	}
 }

@@ -24,6 +24,7 @@ namespace TestApp.SelfHostedRESTSevice.Core
 		public void Stop()
 		{
 			_host.Close();
+			((IDisposable)_host).Dispose();
 		}
 	}
 }
