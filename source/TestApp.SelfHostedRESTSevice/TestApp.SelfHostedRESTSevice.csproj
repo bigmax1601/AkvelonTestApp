@@ -62,9 +62,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Confguration.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Core\RESTService.cs" />
+    <Compile Include="Core\HostingRESTService.cs" />
     <Compile Include="Interfaces\IRESTService.cs" />
+    <Compile Include="Msg.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

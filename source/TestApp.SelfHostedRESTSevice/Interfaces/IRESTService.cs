@@ -11,27 +11,27 @@ namespace TestApp.SelfHostedRESTSevice.Interfaces
 	{
 		//GET operation
 		[OperationContract]
-		[WebGet(UriTemplate = Confguration.Routing.GetUsersRoute)]
+		[WebGet(UriTemplate = Configuration.Routing.GetUsersRoute)]
 		IEnumerable<string> GetAllUsers();
 
 		//GET Operation
 		[OperationContract]
-		[WebGet(UriTemplate = Confguration.Routing.GetUserRoute)]
+		[WebGet(UriTemplate = Configuration.Routing.GetUserRoute)]
 		UserModel GetUser(string nickName);
 
 		//POST Operation
 		[OperationContract]
-		[WebInvoke(UriTemplate = Confguration.Routing.CreateUserRoute, Method = "POST")]
+		[WebInvoke(UriTemplate = Configuration.Routing.CreateUserRoute, Method = "POST")]
 		UserModel CreateUser(UserModel user);
 
 		//PUT Operation
 		[OperationContract]
-		[WebInvoke(UriTemplate = Confguration.Routing.UpdateUserRoute, Method = "PUT")]
+		[WebInvoke(UriTemplate = Configuration.Routing.UpdateUserRoute, Method = "PUT")]
 		UserModel UpdateUser(string nickName, UserModel user);
 
 		//DELETE Operation
 		[OperationContract]
-		[WebInvoke(UriTemplate = Confguration.Routing.DeleteUserRoute, Method = "DELETE")]
+		[WebInvoke(UriTemplate = Configuration.Routing.DeleteUserRoute, Method = "DELETE")]
 		void DeleteUser(string nickName);
 	}
 }

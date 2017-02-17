@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace TestApp.SelfHostedRESTSevice
 {
-	public class Confguration
+	public class Configuration
 	{
 		public static class Constants
 		{
@@ -13,6 +13,7 @@ namespace TestApp.SelfHostedRESTSevice
 
 		public static class Routing
 		{
+			public const string BaseAdress = "http://localhost:7777";
 			public const string RootServiceRoute = "/Services/TestService/";
 
 			public const string GetUsersRoute = RootServiceRoute + "Users";
